@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ user.username }}{% endblock %}
+{% block content %}
+<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+<p>Email: {{ user.email }}</p>
+<a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+{% endblock %}
+
+{% extends "base.html" %}
+{% block title %}{{ user.username }}{% endblock %}
+{% block content %}
+<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+<p>Email: {{ user.email }}</p>
+
+<h2>Feedback</h2>
+<ul>
+    {% for feedback in user.feedback %}
+    <li>
+        <strong>{{ feedback.title }}</strong>
+        <p>{{ feedback.content }}</p>
+        <a href="{{ url_for('update_feedback', feedback_id=feedback.id) }}">Edit</a>
+        <form action="{{ url_for('delete_feedback', feedback_id=feedback.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<h2>Add Feedback</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.title.label(class="form-control-label") }}
+        {{ form.title(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.content.label(class="form-control-label") }}
+        {{ form.content(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+
+<a href="{{ url_for('logout') }}" class="btn btn-secondary">
